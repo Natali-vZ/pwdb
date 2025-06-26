@@ -98,7 +98,7 @@ function up = setup_up
 %%%%  - This should be changed for your computer                %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-up.savefolder = '/Users/petercharlton/Documents/Data/Nektar1D/ageing_sims/';  % (needs to have a slash at the end)
+up.savefolder = '/Users/natalivanzijl/Library/CloudStorage/OneDrive-King''sCollegeLondon/Natali_PostDoc_VITAL/Code/healthy_ageing_sims/';  % (needs to have a slash at the end)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% These lines specify which database configuration to use    %%%%
@@ -106,7 +106,7 @@ up.savefolder = '/Users/petercharlton/Documents/Data/Nektar1D/ageing_sims/';  % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 possible_configs = {'pwdb', 'initial_simulations', 'independent_variations', 'baseline_subject', 'baseline_subjects_at_each_age'};
-up.db_config = possible_configs{1};   % specifies which of the configurations to use.
+up.db_config = possible_configs{5};   % specifies which of the configurations to use.
 
 % See this webpage for further details on each of the configurations:
 % https://github.com/peterhcharlton/pwdb/wiki/Generating-the-Input-Files

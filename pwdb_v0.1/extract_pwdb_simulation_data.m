@@ -57,13 +57,16 @@ fprintf('\n --- Extracting PWDB simulation data ---')
 PATHS = setup_paths_for_post_processing;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Copy input files and output files to a new folder for storage
+% Determine the pwdb number (if not specified by user)
 if nargin==0
-    pwdb_no = CopyFiles(PATHS);
+    pwdb_no = det_pwdb_no(PATHS);
 end
 
 % Setup paths with current simulation paths
 PATHS = setup_paths_for_post_processing(pwdb_no);
+
+% Copy input files and output files to a new folder for storage
+CopyFiles(PATHS);
 
 % Convert output History files into Matlab format
 up.all_data = false; up.all_beats = false;
@@ -93,7 +96,7 @@ fprintf('\n --- Finished extracting PWDB simulation data ---\n')
 
 end
 
-function pwdb_no = CopyFiles(PATHS)
+function pwdb_no = det_pwdb_no(PATHS)
 
 % Identify the number of this pwdb
 prev_pwdbs = dir(PATHS.storage_folder);
@@ -121,6 +124,10 @@ if isempty(possible_files)
     return
 end
 
+end
+
+function CopyFiles(PATHS)
+
 fprintf('\n --- Copying Files ---')
 
 % Identify files to be copied
@@ -145,17 +152,19 @@ for file_no = 1 : length(files_to_copy)
 end
 
 % Copy each input file
+% input_folder = '/Users/natalivanzijl/Library/CloudStorage/OneDrive-King''sCollegeLondon/Natali_PostDoc_VITAL/Code/healthy_ageing_sims/input_data/'; % {Natali: Added this; might need to make these folders within a folder called "VM-share. Make sure to add a "/" at the end, so that it forms the correct conjugated path later on.}
+% output_folder = '/Users/natalivanzijl/Library/CloudStorage/OneDrive-King''sCollegeLondon/Natali_PostDoc_VITAL/Code/healthy_ageing_sims/output_data/'; % {Natali: Added this}
 for file_no = 1 : length(files_to_copy)
     curr_file_path = [PATHS.shared_folder, files_to_copy{file_no}];
     if file_type(file_no) == 1
-        new_file_path = [input_folder, files_to_copy{file_no}];
+        new_file_path = [PATHS.InputFiles, files_to_copy{file_no}];
     else
-        new_file_path = [output_folder, files_to_copy{file_no}];        
+        new_file_path = [PATHS.OutputFiles, files_to_copy{file_no}];        
     end
-    if ~exist(new_file_path, 'file')
+    if ~exist(new_file_path, 'file') %{Natali: exist consistently returns a 7 here because the new_file_path is a directory, which means the files never get coies across - so I'm just commenting that conditional statement out. This might not be true anymore, as I've now changed the paths back to pointing at individual files. So I'm gonna uncomment it again and see if it all works now.}
         copyfile(curr_file_path, new_file_path);
     end
-    delete(curr_file_path)
+    delete(curr_file_path) 
 end
 
 end
@@ -165,7 +174,8 @@ function import_system_chars(PATHS)
 % Check to see whether the required "period.tex" files have been outputted
 % from the simulations:
 
-rel_files = dir([PATHS.OutputFiles, '*_period.tex']);
+% rel_files = dir([PATHS.OutputFiles, '*_period.tex']);
+rel_files = dir(['/Users/natalivanzijl/Library/CloudStorage/OneDrive-King''sCollegeLondon/Natali_PostDoc_VITAL/Code/healthy_ageing_sims/output_folder', '*_period.tex']); %{Natali: I changed the path to the correct one. The commented out line above is the original line.}
 if isempty(rel_files)
     return
 end
@@ -184,7 +194,8 @@ sims = fieldnames(history_files_data);
 for sim_no = 1 : length(sims)
     % identify file for this simulation
     curr_sim = sims{sim_no};
-    filepath = [PATHS.OutputFiles, curr_sim '_period.tex'];
+    % filepath = [PATHS.OutputFiles, curr_sim '_period.tex'];
+    filepath = ['/Users/natalivanzijl/Library/CloudStorage/OneDrive-King''sCollegeLondon/Natali_PostDoc_VITAL/Code/healthy_ageing_sims/output_folder', curr_sim '_period.tex']; %{Natali: Changed to correct path. Commetned out line above is original.}
     fid = fopen(filepath);
     % extract this file's data
     finished = false;
@@ -310,7 +321,7 @@ end
 sims = fieldnames(history_files_data);
 for sim_no = 1 : length(sims)
     % import input data
-    curr_sim_input_data = [PATHS.InputFiles, sims{sim_no}];
+    curr_sim_input_data = [PATHS.InputFiles, sims{sim_no}]; 
     input_data = load(curr_sim_input_data); clear curr_sim_input_data
     input_data = rmfield(input_data, 'sim_up');
     collated_data(sim_no).input_data = input_data; clear input_data

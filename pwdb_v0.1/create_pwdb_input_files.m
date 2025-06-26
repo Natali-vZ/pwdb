@@ -6,7 +6,7 @@ function create_pwdb_input_files
 %
 %   Inputs:     a single file called "inputs.mat", which contains the
 %                   parameters variable required by Nektar1D input files. This
-%                   file can be created using the
+%                up.paths.Matlab_computer_shared_folder   file can be created using the
 %                   "calculate_pwdb_input_parameters.m" script.
 %           
 %
@@ -74,7 +74,7 @@ function up = setup_up
 % This should be the same as in calculate_pwdb_input_parameters.m  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-up.paths.savefolder = '/Users/petercharlton/Documents/Data/Nektar1D/ageing_sims/';  % (needs to have a slash at the end)
+up.paths.savefolder = '/Users/natalivanzijl/Library/CloudStorage/OneDrive-King''sCollegeLondon/Natali_PostDoc_VITAL/Code/healthy_ageing_sims/';  % (needs to have a slash at the end)
 %up.paths.savefolder = '/home/pc13/Documents/Data/Nektar1D/ageing_sims/';
 up.paths.input_parameters_filepath = [up.paths.savefolder, 'inputs.mat'];           % input parameters file
 
@@ -84,13 +84,13 @@ up.paths.input_parameters_filepath = [up.paths.savefolder, 'inputs.mat'];       
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % (i) Computer running Matlab
-up.paths.Matlab_computer_PathRoot         = '/Users/petercharlton/Desktop/temp/pwdb_files/';   % This is where the input files will be stored temporarily before being copied to the shared folder
-up.paths.Matlab_computer_shared_folder    = '/Users/petercharlton/Documents/VM-share/';        % This is a shared folder which the input files are copied into (from the perspective of the Matlab computer)
+up.paths.Matlab_computer_PathRoot         = '/Users/natalivanzijl/Desktop/temp/pwdb_files/';   % This is where the input files will be stored temporarily before being copied to the shared folder
+up.paths.Matlab_computer_shared_folder    = '/Users/natalivanzijl/Documents/VM-share/';        % This is a shared folder which the input files are copied into (from the perspective of the Matlab computer)
 %up.paths.Matlab_computer_PathRoot         = '/home/pc13/Documents/Data/Nektar1D/temp/pwdb_files/';   % This is where the input files will be stored temporarily before being copied to the shared folder
 %up.paths.Matlab_computer_shared_folder    = '/home/pc13/Documents/Data/Nektar1D/VM-share/';        % This is a shared folder which the input files are copied into (from the perspective of the Matlab computer)
 % (ii) Computer running Nektar1D (Ubuntu)
-up.paths.Nektar_computer_shared_folder    = '/media/sf_VM-share/';                             % This is the shared folder (from the perspective of the computer used to run the simulations).
-up.paths.Nektar_computer_sim_folder       = '/home/pc13/Documents/sim/';                       % This is the folder in which the output files from the simulations will be stored temporarily before being copied back to the shared folder.
+up.paths.Nektar_computer_shared_folder    = '~/media/sf_VM-share/';                             % This is the shared folder (from the perspective of the computer used to run the simulations).
+up.paths.Nektar_computer_sim_folder       = '~/Documents/sim/';                       % This is the folder in which the output files from the simulations will be stored temporarily before being copied back to the shared folder.
 %up.paths.Nektar_computer_shared_folder    = '/home/pc13/Documents/Data/Nektar1D/VM-share/';    % This is the shared folder (from the perspective of the computer used to run the simulations).
 %up.paths.Nektar_computer_sim_folder       = '/media/pc13/6050B1A350B18078/Users/pc13/Simulation_data/';
 
@@ -101,7 +101,7 @@ up.paths.Nektar_computer_sim_folder       = '/home/pc13/Documents/sim/';        
 %               will be used to run the simulations.               %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-up.no_launch_files = 2;
+up.no_launch_files = 1;%2;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%   The rest of this function can be left alone   %%%%%%%%
@@ -264,9 +264,10 @@ newline_char = '\n';
 starterfile_path = [up.paths.Matlab_computer_PathRoot, 'launch_starter'];
 fid = fopen(starterfile_path, 'wt');
 file_text = ['mkdir -p ' up.paths.Nektar_computer_sim_folder, newline_char, ...
+            'sudo chown -R $USER:$USER' up.paths.Nektar_computer_sim_folder, newline_char, ... % {Natali: I added this line to give ownership of the created folder to me (because it belongs to root and then I would need to use sudo to use it, but using sudo causes all kinds of other problems.}
             'cd ' up.paths.Nektar_computer_sim_folder, newline_char, ...
             'rm *.*', newline_char, ...
-            'cp ' up.paths.Nektar_computer_shared_folder '*.* .', newline_char, ...
+            'cp ' up.paths.Nektar_computer_shared_folder '*.* .', newline_char, ... 
             'echo Finished operations'];
 fprintf(fid, file_text);
 fclose(fid);
@@ -275,7 +276,7 @@ fclose(fid);
 finisherfile_path = [up.paths.Matlab_computer_PathRoot, 'launch_finisher'];
 fid = fopen(finisherfile_path, 'wt');
 file_text = ['cd ' up.paths.Nektar_computer_sim_folder, newline_char, ...
-            'cp *.* /media/sf_VM-share/.', newline_char, ...
+            'cp *.* ' up.paths.Nektar_computer_shared_folder '.', newline_char, ... % {Natali: 1. I changed the written share folder's path to the variable name containing it. 2. Add a space after the star, so it is 'cp *.* '}
             'echo Finished operations'];
 fprintf(fid, file_text);
 fclose(fid);
@@ -288,8 +289,8 @@ for file_no = 1 : length(launch_file_names)
     
     file_text = ['echo Launching file ', num2str(file_no), newline_char, ...
             'cd ', up.paths.Nektar_computer_sim_folder, newline_char, ...
-            ['chmod u+x ' up.paths.command_file, num2str(file_no), '.txt'], newline_char, ...
-            ['./' up.paths.command_file, num2str(file_no) '.txt'], newline_char, ...
+            ['chmod u+x ' up.paths.command_file, num2str(file_no), '.txt'], newline_char, ... % {Natali: I added "sudo"}
+            ['./' up.paths.command_file, num2str(file_no) '.txt'], newline_char, ... % {Natali: I added "sudo"}
             'echo Finished operations'];
     
     fprintf(fid, file_text);

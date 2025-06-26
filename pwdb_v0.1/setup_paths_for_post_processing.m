@@ -4,14 +4,14 @@ function PATHS = setup_paths_for_post_processing(pwdb_no)
 %      This line specifies the location of the storage folder      %
 %         which the input and output files are copied into         %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-PATHS.storage_folder = '/Users/petercharlton/Documents/Data/Nektar1D/ageing_sims/';
+PATHS.storage_folder = '/Users/natalivanzijl/Library/CloudStorage/OneDrive-King''sCollegeLondon/Natali_PostDoc_VITAL/Code/healthy_ageing_sims/';
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%c%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %      This line specifies the location of the shared folder       %
 %         containing the simulation input and output files         %
 %       (this can be left alone unless reproducing the PWDB)       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-PATHS.shared_folder = '/Users/petercharlton/Documents/VM-share/';
+PATHS.shared_folder = '/Users/natalivanzijl/Documents/VM-share/';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%   The rest of this function can be left alone   %%%%%%%%
