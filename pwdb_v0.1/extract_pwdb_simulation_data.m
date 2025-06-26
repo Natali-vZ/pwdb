@@ -3,7 +3,7 @@ function extract_pwdb_simulation_data(pwdb_no)
 % DataBase simulation input and output files, and saves them in Matlab
 % format.
 %
-%               extract_pwdb_simulation_data
+%           n    extract_pwdb_simulation_data
 %
 %   Inputs:     the input and output files for the simulations, which
 %                   should be stored in the shared folder.
@@ -152,8 +152,6 @@ for file_no = 1 : length(files_to_copy)
 end
 
 % Copy each input file
-% input_folder = '/Users/natalivanzijl/Library/CloudStorage/OneDrive-King''sCollegeLondon/Natali_PostDoc_VITAL/Code/healthy_ageing_sims/input_data/'; % {Natali: Added this; might need to make these folders within a folder called "VM-share. Make sure to add a "/" at the end, so that it forms the correct conjugated path later on.}
-% output_folder = '/Users/natalivanzijl/Library/CloudStorage/OneDrive-King''sCollegeLondon/Natali_PostDoc_VITAL/Code/healthy_ageing_sims/output_data/'; % {Natali: Added this}
 for file_no = 1 : length(files_to_copy)
     curr_file_path = [PATHS.shared_folder, files_to_copy{file_no}];
     if file_type(file_no) == 1
@@ -161,10 +159,10 @@ for file_no = 1 : length(files_to_copy)
     else
         new_file_path = [PATHS.OutputFiles, files_to_copy{file_no}];        
     end
-    if ~exist(new_file_path, 'file') %{Natali: exist consistently returns a 7 here because the new_file_path is a directory, which means the files never get coies across - so I'm just commenting that conditional statement out. This might not be true anymore, as I've now changed the paths back to pointing at individual files. So I'm gonna uncomment it again and see if it all works now.}
+    if ~exist(new_file_path, 'file') 
         copyfile(curr_file_path, new_file_path);
     end
-    delete(curr_file_path) 
+    % delete(curr_file_path) 
 end
 
 end
@@ -174,8 +172,7 @@ function import_system_chars(PATHS)
 % Check to see whether the required "period.tex" files have been outputted
 % from the simulations:
 
-% rel_files = dir([PATHS.OutputFiles, '*_period.tex']);
-rel_files = dir(['/Users/natalivanzijl/Library/CloudStorage/OneDrive-King''sCollegeLondon/Natali_PostDoc_VITAL/Code/healthy_ageing_sims/output_folder', '*_period.tex']); %{Natali: I changed the path to the correct one. The commented out line above is the original line.}
+rel_files = dir([PATHS.OutputFiles, '*_period.tex']);
 if isempty(rel_files)
     return
 end
@@ -194,8 +191,7 @@ sims = fieldnames(history_files_data);
 for sim_no = 1 : length(sims)
     % identify file for this simulation
     curr_sim = sims{sim_no};
-    % filepath = [PATHS.OutputFiles, curr_sim '_period.tex'];
-    filepath = ['/Users/natalivanzijl/Library/CloudStorage/OneDrive-King''sCollegeLondon/Natali_PostDoc_VITAL/Code/healthy_ageing_sims/output_folder', curr_sim '_period.tex']; %{Natali: Changed to correct path. Commetned out line above is original.}
+    filepath = [PATHS.OutputFiles, curr_sim '_period.tex'];
     fid = fopen(filepath);
     % extract this file's data
     finished = false;
