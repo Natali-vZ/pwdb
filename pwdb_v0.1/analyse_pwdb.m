@@ -166,7 +166,8 @@ for sig_type_no = 1 : length(fig_settings.sig_types)
         options.do_demo_plot = false;
         options.do_plot = 1; options.plot_third_deriv = 0;
         options.save_file = ['demo_' curr_sig_type '_' curr_site '_'];
-        PulseAnalyse6(rel_sig, options);
+        % PulseAnalyse6(rel_sig, options);
+        PulseAnalyse10(rel_sig, options); %{Natali: I changed it to "PulseAnalyse10" from "...6", as that fcn is available; I assume it's an updated version.}
         close all
         
     end
@@ -1015,7 +1016,7 @@ fprintf('\n - Making pressure-area plots')
 %% Mynard data
 
 % Import waves from Mynard's article
-loadpath = '/Users/petercharlton/Google Drive/Work/Code/nektar/Mynard2015_data/ABME2015data.mat';
+loadpath = '/Users/natalivanzijl/Library/CloudStorage/OneDrive-King''sCollegeLondon/Natali_PostDoc_VITAL/Code/ABME2015data'; %{Natali: Changed this path to where I have the data saved; Jordi saved the data with me.}
 load(loadpath);
 
 % Setup plotting

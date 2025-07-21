@@ -70,7 +70,8 @@ function make_plots(data, PATHS)
 
 fprintf('\n - Making Plots')
 
-rel_fields = {'PWV_a', 'age', 'dia_asc_a', 'P1in_a', 'P2in_a', 'SV', 'HR', 'LVET', 'CO', 'PP_amp', 'PWV_cf', 'PWV_br', 'DBP_a', 'P1pk_a', 'P2pk_a', 'PP_a', 'AP_a', 'DBP_b', 'P1pk_b', 'P2pk_b', 'P1in_b', 'P2in_b', 'PP_b', 'PP_f', 'SBP_a', 'SBP_b', 'MBP_a', 'MBP_b', 'dia_asc_a', 'SMBP_a', 'SBP_diff', 'c', 'AI_a', 'AI_c', 'P1in_c'};
+% rel_fields = {'PWV_a', 'age', 'dia_asc_a', 'P1in_a', 'P2in_a', 'SV', 'HR', 'LVET', 'CO', 'PP_amp', 'PWV_cf', 'PWV_br', 'DBP_a', 'P1pk_a', 'P2pk_a', 'PP_a', 'AP_a', 'DBP_b', 'P1pk_b', 'P2pk_b', 'P1in_b', 'P2in_b', 'PP_b', 'PP_f', 'SBP_a', 'SBP_b', 'MBP_a', 'MBP_b', 'dia_asc_a', 'SMBP_a', 'SBP_diff', 'c', 'AI_a', 'AI_c', 'P1in_c'};
+rel_fields = {'PWV_a', 'age', 'dia_asc_a', 'P1in_a', 'P2in_a', 'SV', 'HR', 'LVET', 'CO', 'PP_amp', 'PWV_cf', 'PWV_br', 'DBP_a', 'P1pk_a', 'P2pk_a', 'PP_a', 'AP_a', 'DBP_b', 'P1pk_b', 'P2pk_b', 'P1in_b', 'P2in_b', 'PP_b', 'PP_f', 'SBP_a', 'SBP_b', 'MBP_a', 'MBP_b', 'dia_asc_a', 'SMBP_a', 'SBP_diff', 'AI_a', 'AI_c', 'P1in_c'}; %{Natali: I deleted 'c' from this list, as it does not exist in data.haemods. The line above (that has been commented out) is the original line.}
 for field_no = 1 : length(rel_fields)
     
     curr_field = rel_fields{field_no};

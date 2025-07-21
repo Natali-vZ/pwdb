@@ -1928,7 +1928,7 @@ plot(curr_sig.t, curr_sig.sig, 'LineWidth', lwidth); hold on,
 %         plot([sig.t(fid_pts(2)),pp_annot], sig.v(fid_pts(2))*ones(1,2), '--', 'color', 0.6*ones(1,3))
 
 % plot salient points
-pt_names = {'dia', 'dic', 's', 'p1', 'p2'};
+pt_names = {'dia', 'dic', 's', 'p1pk', 'p2pk'};%'p1', 'p2'}; %{Natali: I changed 'p1' and 'p2' to 'p1pk' and 'p2pk' respectively, as 'p1' and 'p2' do not exist int his function, and the placements of 'p1pk' and 'p2pk' on the plot correspond to where I would expect 'p1' and 'p2'.}
 hspace0 = 0;
 for pt_no = 1 : length(pt_names)
     eval(['curr_pt.el = fid_pts.' pt_names{pt_no} '(beat_no) - fid_pts.f1(beat_no)+1;']);

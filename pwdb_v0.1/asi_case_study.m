@@ -338,7 +338,7 @@ for feat_no = 1 : length(asi_data.feat_names)
         vals = asi_data.val(:,feat_no);
         rel_els = find(~isnan(vals) & asi_data.i_age == ages(age_no));
         temp = corrcoef(refs(rel_els), vals(rel_els));
-        rsq_age.v(feat_no,age_no) = temp(1,2)^2; clear temp
+        rsq_age.v(feat_no,age_no) = temp(1,1)^2; clear temp %temp(1,2)^2; clear temp %{Natali: Changed to temp(1, 1), as there is only one column in temp.}
     end
 end
 rsq_age.feat_names = asi_data.feat_names;
@@ -381,7 +381,7 @@ for pwv_no = 1 : length(pwv_types)
     for age_no = 1 : length(ages)
         rel_els = find(~isnan(vals) & asi_data.i_age == ages(age_no));
         temp = corrcoef(refs(rel_els), vals(rel_els));
-        ba.rsq_age.v(pwv_no,age_no) = temp(1,2)^2; clear temp
+        ba.rsq_age.v(pwv_no,age_no) = temp(1,1)^2; clear temp%temp(1,2)^2; clear temp %{Natali: Changed to temp(1, 1), as there is only one column in temp.}
     end
     clear age_no rel_els vals errors
 end

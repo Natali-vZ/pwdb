@@ -206,7 +206,7 @@ for subj_no = 1 : no_subjs
     clear sig_no
     units = units(1:end-1);
     % convert this subject's data into WFDB format
-    mat2wfdb(data_mat, file_names{subj_no}, fs, [], units, descrip, [], signal_names);
+    mat2wfdb(data_mat, file_names{subj_no}, fs, [], units, descrip, [], signal_names); % NOTE: For the 'mat2wfdb' fcn, you need to install the WFDB Toolbox.
     clear data_mat units descrip signal_names sig_names type subtype 
     
 end
