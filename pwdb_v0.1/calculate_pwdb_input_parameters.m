@@ -105,8 +105,10 @@ up.savefolder = '/Users/natalivanzijl/Library/CloudStorage/OneDrive-King''sColle
 %%%%  - This should be changed according to your needs          %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-possible_configs = {'pwdb', 'initial_simulations', 'independent_variations', 'baseline_subject', 'baseline_subjects_at_each_age'};
-up.db_config = possible_configs{5};   % specifies which of the configurations to use.
+possible_configs = {'baseline_subject_47_yr_old', 'pwdb', ...
+    'initial_simulations', 'independent_variations', ...
+    'baseline_subject', 'baseline_subjects_at_each_age'}; % {Natali: I added the option: baseline_subject_42_yr_old}
+up.db_config = possible_configs{1};   % specifies which of the configurations to use.
 
 % See this webpage for further details on each of the configurations:
 % https://github.com/peterhcharlton/pwdb/wiki/Generating-the-Input-Files
@@ -125,9 +127,9 @@ close all
 addpath(genpath(curr_folder));
 
 % Specify all possible ages (only a subset of these will actually be used in the database):
-up.mod_ages = 25:75;
+up.mod_ages = 45:84;%25:75; %{Natali: I changed this to the total range of ages I'm including from UKBB to calibrate the input parameters}
 % Specify the baseline age, which is the one the baseline model configuration corresponds to:
-up.baseline_age = 25;
+up.baseline_age = 47;%25; {Natali: Changed to 47, as that is the first baseline subject for the virtual population calibrated using UKBB}
 
 % Give details of the Excel file which contains the baseline model geometry:
 up.network_spec_sheet = 'Haemod 116 segments';
@@ -173,6 +175,177 @@ vdb_characteristics.age.baseline = up.baseline_age;
 %     [mean - 1SD, mean - 0.5SD, mean, mean + 0.5SD, mean + 1SD]
 
 switch up.db_config
+    
+            %% %% %% {Natali} Single baseline simulation %% %% %%
+        % This is a single simulation of the baseline 47-year old model
+        % calibrated using UK Biobank data.
+        % It is based on Pete's simulation of a baseline 25-year old model.
+        % I have changed the ages to 45:84 and the baseline age to 47 to
+        % match the ages from UKBB.
+        % Thereafter I will change one input parameter at a time to "move" 
+        % it towards my model.
+        % NOTE: I think there is a small mistake somewhere in Pete's code,
+        % because even when I run his prep for 'baseline_subject', it
+        % generates input files for 6 simulations (which are probably the
+        % baseline subjects at each age). I'm not going to take the time to
+        % find the bug; instead, I will simply delete the extra 5
+        % simulations from the shared folder before running Nektar1D on my
+        % virtual machine. Sim1 is the one that corresponds to the age I
+        % set as baseline; the otehrs are the last 5 baseline ages in
+        % Pete's virtual population.
+    case 'baseline_subject_47_yr_old'
+        
+        vdb_characteristics.age.all = 47;
+        
+        %% Cardiac properties
+        
+        % - Heart Rate (HR)
+        vdb_characteristics.hr.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.hr.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.hr.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.hr.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.hr.variation_sds = 0;
+        
+        % - Stroke Volume (SV)
+        vdb_characteristics.sv.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.sv.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.sv.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.sv.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.sv.variation_sds = 0;
+        
+        % - Left Ventricular Ejection Time (LVET): duration of systole
+        vdb_characteristics.lvet.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.lvet.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.lvet.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.lvet.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.lvet.variation_sds = 0;
+        
+        % - Time to Peak Flow (t_pf): the time from the beginning of the aortic flow wave to its peak
+        vdb_characteristics.t_pf.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.t_pf.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.t_pf.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.t_pf.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.t_pf.variation_sds = 0;
+        
+        % - Regurgitation volume (reg_vol): the amount of backwards flow at the end of systole
+        vdb_characteristics.reg_vol.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.reg_vol.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.reg_vol.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.reg_vol.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.reg_vol.variation_sds = 0;
+        
+        %% Vascular bed properties
+        
+        % - Peripheral Vascular Compliance (pvc)
+        vdb_characteristics.pvc.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.pvc.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.pvc.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.pvc.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.pvc.variation_sds = 0;
+        
+        % - Outflow Pressure (p_out)
+        vdb_characteristics.p_out.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.p_out.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.p_out.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.p_out.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.p_out.variation_sds = 0;
+        
+        % - Mean Blood Pressure (mbp): the peripheral vascular resistance is set to achieve the desired value of MBP
+        vdb_characteristics.mbp.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.mbp.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.mbp.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.mbp.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.mbp.variation_sds = 0;
+        
+        % - Reflections logical: whether to include reflections
+        vdb_characteristics.reflect_log.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.reflect_log.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.reflect_log.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.reflect_log.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.reflect_log.variation_sds = 0;
+        
+        %% Arterial properties
+        
+        % - Pulse Wave Velocity (pwv)
+        vdb_characteristics.pwv.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.pwv.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.pwv.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.pwv.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.pwv.variation_sds = 0;
+        
+        % - Diastolic blood pressure (dbp): the pressure corresponding to the initial luminal areas (note that this has very little affect)
+        vdb_characteristics.dbp.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.dbp.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.dbp.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.dbp.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.dbp.variation_sds = 0;
+        
+        % - Pressure drop (p_drop): the assumed pressure drop from the aortic root to the end of the arterial network
+        vdb_characteristics.p_drop.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.p_drop.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.p_drop.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.p_drop.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.p_drop.variation_sds = 0;
+        
+        % - Length of the proximal aorta (len)
+        vdb_characteristics.len.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.len.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.len.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.len.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.len.variation_sds = 0;
+        
+        % - Diameter of the larger arteries (dia, e.g. ascending, descending aorta, carotid, brachial, ...)
+        vdb_characteristics.dia.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.dia.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.dia.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.dia.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.dia.variation_sds = 0;
+        
+        % - Wall viscosity
+        vdb_characteristics.gamma.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.gamma.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.gamma.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.gamma.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.gamma.variation_sds = 0;
+        
+        %% Blood properties
+        
+        % - Blood density (rho)
+        vdb_characteristics.rho.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.rho.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.rho.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.rho.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.rho.variation_sds = 0;
+        
+        % - Blood viscosity (mu)
+        vdb_characteristics.mu.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.mu.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.mu.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.mu.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.mu.variation_sds = 0;
+        
+        %% - Simulation properties
+        
+        % - alpha: controls the shape of the velocity profile (assumed to be constant throughout the arterial tree)
+        vdb_characteristics.alpha.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.alpha.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.alpha.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.alpha.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.alpha.variation_sds = 0;
+        
+        % - time_step: which is the numerical time step used for calculations
+        vdb_characteristics.time_step.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.time_step.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.time_step.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.time_step.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.time_step.variation_sds = 0;
+        
+        % - visco_elastic_log: determines whether the simulations are elastic or visco-elastic
+        vdb_characteristics.visco_elastic_log.no_combination_variations_at_other_ages = 0;
+        vdb_characteristics.visco_elastic_log.no_independent_variations_at_other_ages = 0;
+        vdb_characteristics.visco_elastic_log.no_combination_variations_at_baseline_age = 0;
+        vdb_characteristics.visco_elastic_log.no_independent_variations_at_baseline_age = 0;
+        vdb_characteristics.visco_elastic_log.variation_sds = 0;
     
     %% %% %% Initial Simulations %% %% %%
     % These consist of changing 10 parameters independently by +/- 1SD for the
@@ -498,7 +671,7 @@ switch up.db_config
     % was the approach used in the preliminary pulse wave database.
     case 'independent_variations'
         
-        vdb_characteristics.age.all = 25:10:75;  % Ten-year intervals
+        vdb_characteristics.age.all = 25:10:75;  % Ten-year intervals 
         
         %% Cardiac properties
         
@@ -1114,7 +1287,7 @@ end
 
 function param_variations = find_param_values(curr_param, ages)
 % This function works out what values (in terms of SD from the mean) each parameter
-% should take in the database, at what age(s), and whether to inclue these
+% should take in the database, at what age(s), and whether to include these
 % variations independently or in combination with each other.
 
 % cycle through each age
@@ -1455,7 +1628,7 @@ sd_percentile.upper_v = (1/no_sds)*100* [(7.0-6.0)/6.0, (7.5-6.4)/6.4, (7.9-6.7)
     (11.4-8.7)/8.7, (12.2-9.3)/9.3, (13.2-9.8)/9.8, (14.1-10.7)/10.7, (16.5-12.0)/12.0; ...
     (13.8-10.1)/10.1, (15.5-11.1)/11.1, (15.8-11.2)/11.2, (16.7-12.7)/12.7, (18.2-13.5)/13.5 ...
     ];
-sd_percentile.age = 25:10:75;
+sd_percentile.age = 47:5:84;%25:10:75; %{Natali: Changed to the mean ages from UKBB}
 
 % add on extrapolated values (assuming a constant percentage value for the SD outside of the specified data range)
 sd_percentile.mbp = [0, init_mbp_vals, 500];
@@ -1463,7 +1636,7 @@ sd_percentile.lower_v = [sd_percentile.lower_v(:,1), sd_percentile.lower_v, sd_p
 sd_percentile.upper_v = [sd_percentile.upper_v(:,1), sd_percentile.upper_v, sd_percentile.upper_v(:,end)];
 
 % find reference PWV values for different ages and different MBPs
-age = 20:80;
+age = 40:90;% 20:80; %{Natali: Changed this to a range that includes the UKBB mean ages. Will need to check if this relationship holds for this range of ages.}
 for n = 1 : length(A)
     pwv_age(:,n) = A(n)*age + B(n)*(age.^2) + C(n);
 end
@@ -1662,7 +1835,7 @@ end
 function make_param_plots(up)
 
 % setup
-required_age = 25:1:75;
+required_age = 47:1:84;%25:1:75; %{Natali: changed this to UKBB ages}
 params = {'pwv_cf', 'pwv_fa', 'pwv_br', 't_pf', 'lvet', 'reg_vol', 'pvc', 'dbp', 'mbp', 'hr', 'sv', 'len', 'dia_asc', 'dia_desc_thor', 'dia_abd', 'dia_carotid'};
 ftsize = 32;
 lwidth = 2;
@@ -1998,13 +2171,21 @@ switch param
         
     case 'hr'
         
+        % % Natali: Data obtained from male data in UK Biobank
+        % % {Note: Consider changing this structure to call values from a csv 
+        % % file instead of typing them all into this script.}
+        % article_data.val.age = 47:5:82; % ages at which we have mean vales (all ages for UKBB)
+        % article_data.val.v = [61 60 60 61 61 61 61 66]; % mean vals
+        % article_data.sd.age = article_data.val.age; % ages at which we have SD vales (all ages & same as for means for UKBB)
+        % article_data.sd.v = [9 10 10 10 10 10 10 7]; % SD vals
+        
         % Mean data obtained from male data in Fig.1 of Yashin2006
         article_data.val.age = 32.5:5:92.5;
         temp = [80,95,97.5,96,94,93,90,84,76,66,57,51,51];
         article_data.val.v = 66 + (12*(temp-5)/(99-5));
-        
+
         % SD data calculated from Table 1 of Petersen2017 (assumed to remain constant with age) 
-        
+
         means = [67,69,70]; sds = [10,12,11]; n = [240,333,231];
         overall_n = sum(n);
         overall_mean = sum(means.*n)/overall_n;
@@ -2019,7 +2200,7 @@ switch param
             overall_sd_squared = overall_sd_squared + (curr_contribution_to_sd_squared/(overall_n-1));
         end
         overall_SD = sqrt(overall_sd_squared);
-        
+
         article_data.sd.age = [51, 59, 68];
         article_data.sd.mean_val = ones(1,3)*overall_mean;
         article_data.sd.v = ones(1,3)*overall_SD;  
